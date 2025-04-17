@@ -31,44 +31,44 @@ resource "aws_apigatewayv2_vpc_link" "tc_vpc_link" {
   ]
 }
 
-# resource "aws_apigatewayv2_integration" "tc_eks_api_integration_upload" {
-#   api_id = aws_apigatewayv2_api.tc_api_gateway.id
+resource "aws_apigatewayv2_integration" "tc_eks_api_integration_upload" {
+  api_id = aws_apigatewayv2_api.tc_api_gateway.id
 
-#   integration_uri    = var.loadBalancerUriUpload
-#   integration_type   = "HTTP_PROXY"
-#   integration_method = "ANY"
-#   connection_type    = "VPC_LINK"
-#   connection_id      = aws_apigatewayv2_vpc_link.tc_vpc_link.id
+  integration_uri    = var.loadBalancerUriUpload
+  integration_type   = "HTTP_PROXY"
+  integration_method = "ANY"
+  connection_type    = "VPC_LINK"
+  connection_id      = aws_apigatewayv2_vpc_link.tc_vpc_link.id
 
-#   request_parameters = {
-#     "overwrite:path" = "/$request.path.proxy"
-#   }
-# }
+  request_parameters = {
+    "overwrite:path" = "/$request.path.proxy"
+  }
+}
 
-# resource "aws_apigatewayv2_integration" "tc_eks_api_integration_status_tracking" {
-#   api_id = aws_apigatewayv2_api.tc_api_gateway.id
+resource "aws_apigatewayv2_integration" "tc_eks_api_integration_status_tracking" {
+  api_id = aws_apigatewayv2_api.tc_api_gateway.id
 
-#   integration_uri    = var.loadBalancerUriStatusTracking
-#   integration_type   = "HTTP_PROXY"
-#   integration_method = "ANY"
-#   connection_type    = "VPC_LINK"
-#   connection_id      = aws_apigatewayv2_vpc_link.tc_vpc_link.id
+  integration_uri    = var.loadBalancerUriStatusTracking
+  integration_type   = "HTTP_PROXY"
+  integration_method = "ANY"
+  connection_type    = "VPC_LINK"
+  connection_id      = aws_apigatewayv2_vpc_link.tc_vpc_link.id
 
-#   request_parameters = {
-#     "overwrite:path" = "/$request.path.proxy"
-#   }
-# }
+  request_parameters = {
+    "overwrite:path" = "/$request.path.proxy"
+  }
+}
 
-# resource "aws_apigatewayv2_route" "all_pagamentos" {
-#   api_id = aws_apigatewayv2_api.tc_api_gateway.id
+resource "aws_apigatewayv2_route" "all_upload" {
+  api_id = aws_apigatewayv2_api.tc_api_gateway.id
 
-#   route_key = "ANY /pagamentos/{proxy+}"
-#   target    = "integrations/${aws_apigatewayv2_integration.tc_eks_api_integration_pagamentos.id}"
-# }
+  route_key = "ANY /upload/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.tc_eks_api_integration_upload.id}"
+}
 
-# resource "aws_apigatewayv2_route" "all_pedidos" {
-#   api_id = aws_apigatewayv2_api.tc_api_gateway.id
+resource "aws_apigatewayv2_route" "all_status" {
+  api_id = aws_apigatewayv2_api.tc_api_gateway.id
 
-#   route_key = "ANY /pedidos/{proxy+}"
-#   target    = "integrations/${aws_apigatewayv2_integration.tc_eks_api_integration_pedidos.id}"
-# }
+  route_key = "ANY /status/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.tc_eks_api_integration_status_tracking.id}"
+}
